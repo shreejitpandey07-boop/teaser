@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ff6fa3">
+<title>👀 Something's Cooking</title>
+<style>
+:root{
+  --pink:#ff5f91;
+  --purple:#8d78ff;
+  --yellow:#ffd35c;
+  --mint:#4fd1b1;
+  --ink:#563e4b;
+  --paper:#fff7fb;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;height:100%;}
+body{
+  margin:0;
+  min-height:100%;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--ink);
+  text-align:center;
+  padding:env(safe-area-inset-top,0px) 18px env(safe-area-inset-bottom,0px);
+  background:
+    radial-gradient(circle at 12% 15%,#ffd6e8 0 14%,transparent 30%),
+    radial-gradient(circle at 88% 12%,#d8d4ff 0 12%,transparent 28%),
+    radial-gradient(circle at 18% 88%,#fff0b8 0 10%,transparent 25%),
+    radial-gradient(circle at 85% 85%,#c9f7ee 0 11%,transparent 26%),
+    linear-gradient(135deg,#fff5fa,#f7f2ff,#f0fbff);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--paper:#2a2230;--ink:#f4e9ef;}
+  body:not([data-theme="light"]){
+    background:
+      radial-gradient(circle at 12% 15%,#5a2f45 0 14%,transparent 30%),
+      radial-gradient(circle at 88% 12%,#3c3660 0 12%,transparent 28%),
+      linear-gradient(135deg,#241d29,#231f30,#1e2528);
+  }
+}
+
+.blob{position:fixed;border-radius:50%;filter:blur(10px);opacity:.35;pointer-events:none;z-index:0;}
+.blob.a{width:150px;height:150px;background:var(--pink);left:-50px;top:15%;animation:mv1 13s ease-in-out infinite;}
+.blob.b{width:130px;height:130px;background:var(--purple);right:-55px;top:55%;animation:mv2 16s ease-in-out infinite;}
+.blob.c{width:120px;height:120px;background:var(--yellow);left:12%;bottom:-60px;animation:mv3 15s ease-in-out infinite;}
+@keyframes mv1{0%,100%{transform:translate(0,0)}50%{transform:translate(50px,-40px) scale(1.15)}}
+@keyframes mv2{0%,100%{transform:translate(0,0)}50%{transform:translate(-55px,35px) scale(.85)}}
+@keyframes mv3{0%,100%{transform:translate(0,0)}50%{transform:translate(35px,-45px) scale(1.1)}}
+
+.page{
+  position:relative;
+  z-index:5;
+  width:min(480px,100%);
+  display:none;
+}
+.page.active{
+  display:block;
+  animation:pageEnter .5s ease;
+}
+@keyframes pageEnter{
+  from{opacity:0;transform:translateY(16px) scale(.98);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+
+.card{
+  padding:44px 32px;
+  border-radius:32px;
+  background:rgba(255,255,255,.86);
+  border:2px solid rgba(255,255,255,.95);
+  box-shadow:0 25px 70px rgba(107,65,100,.16),0 5px 18px rgba(107,65,100,.07);
+  backdrop-filter:blur(18px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .card{background:rgba(40,32,44,.82);border-color:rgba(255,255,255,.08);}
+}
+
+.clock{
+  font-size:56px;
+  display:inline-block;
+  animation:tick 2s ease-in-out infinite;
+}
+@keyframes tick{
+  0%,100%{transform:rotate(0deg);}
+  25%{transform:rotate(-10deg);}
+  75%{transform:rotate(10deg);}
+}
+
+.back-btn{
+  margin-top:8px;
+  padding:10px 20px;
+  border:2px solid #ffd0df;
+  border-radius:999px;
+  background:#fff;
+  color:var(--pink);
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.back-btn:hover{transform:translateY(-2px);}
+.back-btn:focus-visible{outline:3px solid rgba(255,105,155,.4);outline-offset:3px;}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .back-btn{background:rgba(40,32,44,.82);border-color:rgba(255,255,255,.15);}
+}
+
+.lock{
+  font-size:56px;
+  display:inline-block;
+  animation:wiggle 2.4s ease-in-out infinite;
+}
+@keyframes wiggle{
+  0%,100%{transform:rotate(0deg);}
+  10%{transform:rotate(-8deg);}
+  20%{transform:rotate(8deg);}
+  30%{transform:rotate(-4deg);}
+  40%{transform:rotate(0deg);}
+}
+
+h1{
+  font-size:clamp(26px,6vw,34px);
+  line-height:1.2;
+  margin:18px 0 8px;
+  color:var(--pink);
+}
+p{
+  font-size:16px;
+  line-height:1.6;
+  margin:0 0 6px;
+  opacity:.85;
+}
+.small{
+  font-size:13px;
+  opacity:.6;
+  margin-top:18px;
+}
+
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin:26px 0 8px;
+}
+.dot{
+  width:10px;height:10px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  animation:bounce 1.2s ease-in-out infinite;
+}
+.dot:nth-child(2){animation-delay:.15s;}
+.dot:nth-child(3){animation-delay:.3s;}
+@keyframes bounce{
+  0%,80%,100%{transform:translateY(0);opacity:.5;}
+  40%{transform:translateY(-8px);opacity:1;}
+}
+
+.hint-btn{
+  margin-top:22px;
+  padding:12px 24px;
+  border:0;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--pink),#ff8b9e);
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 9px 22px rgba(255,95,145,.25);
+  transition:.2s ease;
+}
+.hint-btn:hover{transform:translateY(-2px) scale(1.03);}
+.hint-btn:active{transform:scale(.96);}
+.hint-btn:focus-visible{outline:3px solid rgba(255,105,155,.4);outline-offset:3px;}
+
+.hint-text{
+  margin-top:14px;
+  font-size:14px;
+  min-height:20px;
+  color:#a25b78;
+  font-style:italic;
+}
+
+.star{
+  position:fixed;
+  width:4px;height:4px;border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 6px #fff;
+  pointer-events:none;
+  z-index:1;
+  animation:twinkle 2s ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.7);}50%{opacity:1;transform:scale(1.4);}}
+</style>
+</head>
+<body>
+
+<div class="blob a"></div>
+<div class="blob b"></div>
+<div class="blob c"></div>
+
+<div class="page active" id="page1">
+  <div class="card">
+    <span class="lock">🔒</span>
+    <h1>Something's cooking&nbsp;👀</h1>
+    <p>I made a thing. It's not ready to show you yet.</p>
+    <p>You'll know when you know.</p>
+    <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <button class="hint-btn" onclick="dropHint()">Give me a hint</button>
+    <div class="hint-text" id="hintText"></div>
+    <br>
+    <button class="hint-btn" style="background:linear-gradient(135deg,var(--purple),#b98cff)" onclick="goToPage('page2')">Okay just let me see it</button>
+    <div class="small">no, i'm not telling you more than that</div>
+  </div>
+</div>
+
+<div class="page" id="page2">
+  <div class="card">
+    <span class="clock">⏳</span>
+    <h1>You're gonna have to wait, my friend</h1>
+    <p>Nice try though.</p>
+    <p>It'll be worth it, I promise.</p>
+    <br>
+    <button class="back-btn" onclick="goToPage('page1')">fine, back to being patient</button>
+  </div>
+</div>
+
+<script>
+const hints=[
+  "it involves someone who isn't you 💅",
+  "it took way longer than it should have",
+  "there may or may not be confetti",
+  "you'll probably need the sound on",
+  "it's cuter than it has any right to be",
+  "patience. that's the hint.",
+  "you're going to want to see this one",
+  "there's at least one photo involved",
+  "i may have stayed up way too late on this",
+  "it's not a prank, i promise",
+  "colors were definitely a design choice",
+  "you'll probably want to click around when it's ready",
+  "no, i won't send it early",
+];
+let used=[];
+function dropHint(){
+  const el=document.getElementById('hintText');
+  if(used.length===hints.length) used=[];
+  let pick;
+  do{ pick=hints[Math.floor(Math.random()*hints.length)]; } while(used.includes(pick) && used.length<hints.length);
+  used.push(pick);
+  el.style.opacity=0;
+  setTimeout(()=>{ el.textContent=pick; el.style.transition='opacity .3s ease'; el.style.opacity=1; },150);
+}
+
+function goToPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function createStars(){
+  for(let i=0;i<30;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    s.style.left=Math.random()*100+'vw';
+    s.style.top=Math.random()*100+'vh';
+    s.style.animationDelay=Math.random()*3+'s';
+    document.body.appendChild(s);
+  }
+}
+createStars();
+</script>
+</body>
+</html>
